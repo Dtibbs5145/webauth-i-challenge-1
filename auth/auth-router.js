@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const authenticate = require('./authenticate-middleware');
 const Users = require('../users/users-model');
 
-router.get('/users', (req, res) => {
+router.get('/users', authenticate, (req, res) => {
     Users.find()
         .then(users => {
             res.json(users);
@@ -11,7 +11,7 @@ router.get('/users', (req, res) => {
         .catch(err => res.send(err));
 })
 
-router.post('/register', authenticate, (req, res) => {
+router.post('/register', (req, res) => {
     let user = req.body;
     const hash = bcrypt.hashSync(user.password, 14)
     user.password = hash;
